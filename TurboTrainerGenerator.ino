@@ -15,6 +15,7 @@ RPM = Integral([a x Motor_Current] - [(b x RPM) + (c x RPM^2)])dt
 #define       a         -20.0
 #define       b         0.015
 #define       c         0.75e-6
+#define       GRADIENT  5.0
 
 VescUart        UART;
 Average         FilterI(0);
@@ -43,12 +44,12 @@ void loop() {
   }
 
   if(Motor_RPM_Measured > 2000.0)  {                                        // If the motor ERPM > 2000 operate in speed control mode                                              
-    RPM = RPM + (a*Motor_Current - b*RPM - c*RPM*RPM);                        
+    RPM = RPM + (a*Motor_Current - b*RPM - c*RPM*RPM - GRADIENT);                        
     UART.setRPM(RPM);  
   }
   else  {                                                                   // Essentially disengage the motor if it is spinning very slowly
     UART.setBrakeCurrent(0.0);    
     UART.setCurrent(0.0);
-    RPM = 2035.0;                                                      
+    RPM = 2040.0;                                                      
   }
 }
